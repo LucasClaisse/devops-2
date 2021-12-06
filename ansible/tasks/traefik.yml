@@ -1,0 +1,23 @@
+---
+- hosts: all
+
+  tasks:
+
+  - name: Copy Traefik config files from the host to the serveur
+    copy:
+      src: ../src/traefik
+      dest: ~/kubernetes
+      owner: devops
+      group: devops
+
+  - name: Define the Ressources used by Traefik on the k8s cluster
+    shell: "kubectl apply -f ~/kubernetes/traefik/Resources.yaml"
+    become: yes
+    become_method: su
+    become_user: devops
+
+  - name: Create the Traefik app
+    shell: "kubectl apply -f ~/kubernetes/traefik/Traefik.yaml"
+    become: yes
+    become_method: su
+    become_user: devops
