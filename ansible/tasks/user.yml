@@ -5,4 +5,4 @@
   - name: Add the user 'devops'
     ansible.builtin.user:
       name: devops
-      password: {{ user_password }}
+      password: "{{ user_password }}"

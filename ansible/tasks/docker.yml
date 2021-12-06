@@ -19,6 +19,17 @@
       state: present
       update_cache: no
 
+  - name: Copy docker config
+    copy:
+      src: ../src/docker/daemon.json
+      dest: /etc/docker/daemon.json
+
+  - name: Restart service docker, also issue daemon-reload to pick up config changes
+    ansible.builtin.systemd:
+      state: restarted
+      daemon_reload: yes
+      name: docker
+
   - name: Run and enable docker
     service:
       name: docker

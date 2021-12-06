@@ -25,43 +25,40 @@ spec:
       serviceAccountName: traefik-ingress-controller
       containers:
         - name: traefik
-          image: traefik:v2.4.5
+          image: traefik:v2.5
           args:
+            - --api.insecure
             - --accesslog
-
-            - --entrypoints.web.Address=:80
-            - --entrypoints.websecure.Address=:443
-
+            - --entrypoints.web.Address=:8000
+            - --entrypoints.websecure.Address=:4443
             - --providers.kubernetescrd
-
             - --certificatesresolvers.myresolver.acme.tlschallenge
             - --certificatesresolvers.myresolver.acme.email=claisselucas@gmail.com
             - --certificatesresolvers.myresolver.acme.storage=acme.json
+            - --certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
           ports:
             - name: web
-              containerPort: 80
-              hostPort: 80
+              containerPort: 8000
             - name: websecure
-              containerPort: 443
-              hostPort: 443
+              containerPort: 4443
             - name: admin
               containerPort: 8080
-              hostPort: 8080
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: traefik
+
 spec:
   ports:
     - protocol: TCP
       name: web
-      port: 80
+      port: 8000
     - protocol: TCP
       name: admin
       port: 8080
     - protocol: TCP
       name: websecure
-      port: 443
+      port: 4443
   selector:
     app: traefik

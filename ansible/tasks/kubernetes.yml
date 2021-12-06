@@ -30,7 +30,7 @@
       state: restarted
 
   - name: kubeadm init (prod)
-    shell: "kubeadm init --pod-network-cidr=192.168.0.0/16 --node-name=prod --apiserver-cert-extra-sans={{ ansible_host }} --cgroup-driver=cgroupfs"
+    shell: "kubeadm init --pod-network-cidr=192.168.0.0/16 --node-name=prod --apiserver-cert-extra-sans={{ ansible_host }}"
 
   - name: Giving user devops permission to use kubectl (1)
     file:
@@ -73,9 +73,6 @@
       state: directory
       owner: devops
       group: devops
-      
-  - name: Make ~/kubernetes/app-deployment.sh an executable
-    file: dest=~/kubernetes/app-deployment.sh mode=a+x
 
   - name: Create volume folder in /mnt/disk/data
     file:

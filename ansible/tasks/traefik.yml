@@ -6,7 +6,7 @@
   - name: Copy Traefik config files from the host to the serveur
     copy:
       src: ../src/traefik
-      dest: ~/kubernetes
+      dest: /home/devops/kubernetes
       owner: devops
       group: devops
 
