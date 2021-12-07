@@ -1,0 +1,9 @@
+all:
+  children:
+    production:
+      hosts:
+        devops2.epitech.lucas-claisse.com:
+    pre_production:
+      hosts:
+    development:
+      hosts:

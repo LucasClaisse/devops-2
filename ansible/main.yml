@@ -1,0 +1,6 @@
+---
+- import_playbook: "tasks/base.yml"
+- import_playbook: "tasks/user.yml"
+- import_playbook: "tasks/docker.yml"
+- import_playbook: "tasks/kubernetes.yml"
+- import_playbook: "tasks/traefik.yml"

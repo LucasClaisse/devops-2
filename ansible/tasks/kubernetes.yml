@@ -1,0 +1,82 @@
+---
+- hosts: all
+
+  tasks:
+
+  - name: Add an apt signing key for Kubernetes
+    apt_key:
+      url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+      state: present
+
+  - name: Adding apt repository for Kubernetes
+    apt_repository:
+      repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
+      state: present
+      filename: kubernetes.list
+
+  - name: Install kubelet kubeadm kubectl
+    apt:
+      name:
+        - kubelet
+        - kubeadm
+        - kubectl
+      state: present
+      update_cache: no
+
+  - name: Restart kubelet
+    service:
+      name: kubelet
+      daemon_reload: yes
+      state: restarted
+
+  - name: kubeadm init (prod)
+    shell: "kubeadm init --pod-network-cidr=192.168.0.0/16 --node-name=prod --apiserver-cert-extra-sans={{ ansible_host }}"
+
+  - name: Giving user devops permission to use kubectl (1)
+    file:
+      path: /home/devops/.kube
+      state: directory
+      owner: devops
+      group: devops
+
+  - name: Giving user devops permission to use kubectl (2)
+    shell: "cp -i /etc/kubernetes/admin.conf /home/devops/.kube/config"
+
+  - name: Giving user devops permission to use kubectl (3)
+    shell: "chown devops:devops /home/devops/.kube/config"
+
+  - name: Add Calico containers (1)
+    shell: "kubectl create -f https://docs.projectcalico.org/manifests/tigera-operator.yaml"
+    become: yes
+    become_method: su
+    become_user: devops
+
+  - name: Add Calico containers (2)
+    shell: "kubectl create -f https://docs.projectcalico.org/manifests/custom-resources.yaml"
+    become: yes
+    become_method: su
+    become_user: devops
+
+  - name: Sleep for 60
+    wait_for:
+      timeout: 60
+
+  - name: Taint node
+    shell: "kubectl taint nodes --all node-role.kubernetes.io/master-"
+    become: yes
+    become_method: su
+    become_user: devops
+
+  - name: Create ~/kubernetes folder
+    file:
+      path: ~/kubernetes
+      state: directory
+      owner: devops
+      group: devops
+
+  - name: Create volume folder in /mnt/disk/data
+    file:
+      path: /mnt/disk/data
+      state: directory
+      owner: devops
+      group: devops
