@@ -43,6 +43,6 @@ jobs:
         with:
           builder: ${{ steps.builder.outputs.name }}
           context: .
-          file: ./${{ matrix.app }}/Dockerfile
+          file: ./${{ matrix.app }}/app/Dockerfile
           tags: ${{ steps.docker_meta.outputs.tags }}
           push: true
