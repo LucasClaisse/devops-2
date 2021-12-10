@@ -42,7 +42,7 @@ jobs:
         uses: docker/build-push-action@v2.2.2
         with:
           builder: ${{ steps.builder.outputs.name }}
-          context: .
+          context: ./${{ matrix.app }}/app/
           file: ./${{ matrix.app }}/app/Dockerfile
           tags: ${{ steps.docker_meta.outputs.tags }}
           push: true
