@@ -34,7 +34,7 @@ jobs:
         id: docker_meta
         uses: crazy-max/ghaction-docker-meta@v1.11.0
         with:
-          images: ${{ matrix.app }}
+          images: ${{ github.repository }}/${{ matrix.app }}
           tag-custom: "latest"
           tag-latest: false
 
