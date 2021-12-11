@@ -1,4 +1,4 @@
-# This workflow is triggered on tag push finishing with '-preprod'
+# This workflow is triggered on tag push
 
 name: CD preproduction
 
@@ -50,9 +50,9 @@ jobs:
       - name: Setup k8s Context
         uses: azure/k8s-set-context@v1
         with:
-          method: kubeconfig
-          kubeconfig: ${{ secrets.KUBECONFIG }}
-          context: prod
+          method: service-account
+          k8s-url: https://135.181.203.20:6443
+          k8s-secret: ${{ secrets.K8S_SECRET }}
 
       - name: Deploy manifest to k8s cluster
         uses: Azure/k8s-deploy@v1.4
