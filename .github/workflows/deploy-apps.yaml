@@ -46,3 +46,18 @@ jobs:
           file: ./${{ matrix.app }}/app/Dockerfile
           tags: ${{ steps.docker_meta.outputs.tags }}
           push: true
+
+      - name: Setup k8s Context
+        uses: azure/k8s-set-context@v1
+        with:
+          method: kubeconfig
+          kubeconfig: ${{ secrets.KUBECONFIG }}
+          context: prod
+
+      - name: Deploy manifest to k8s cluster
+        uses: Azure/k8s-deploy@v1.4
+        with:
+          namespace: ${{ matrix.app }}
+          manifests: |
+            ${{ matrix.app }}/deployment/Deployment.yaml
+            ${{ matrix.app }}/deployment/ingressroute.yaml
