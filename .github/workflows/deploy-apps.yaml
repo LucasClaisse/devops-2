@@ -35,9 +35,8 @@ jobs:
         uses: crazy-max/ghaction-docker-meta@v1.11.0
         with:
           images: ghcr.io/${{ github.repository }}/${{ matrix.app }}
-          tag-custom: "latest"
           tag-latest: true
-          tags-sha: true
+          tag-sha: true
 
       - name: Build and push ${{ matrix.app }} Docker image
         uses: docker/build-push-action@v2.2.2
