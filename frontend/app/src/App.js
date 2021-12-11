@@ -5,7 +5,8 @@ import './App.css';
 function App() {
   const [data, setData] = useState();
 
-  const api_host = process.env.REACT_APP_API_HOST || "http://localhost:8080/";
+  const api_host = process.env.REACT_APP_API_HOST || "https://backend.devops2.epitech.lucas-claisse.com/";
+  
   useEffect(() => {
     let interval = setInterval(() => {
       fetch(api_host)

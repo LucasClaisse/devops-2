@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app
+  namespace: frontend
+  labels:
+    app: app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: app
+  template:
+    metadata:
+      labels:
+        app: app
+    spec:
+      containers:
+      - name: api
+        image: ghcr.io/lucasclaisse/devops-2/frontend:latest
+        imagePullPolicy: Always
+        env:
+          - name: REACT_APP_API_HOST
+            value: https://backend.devops2.epitech.lucas-claisse.com/
+
+      imagePullSecrets:
+      - name: regcred
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app
+  namespace: frontend
+spec:
+  selector:
+    app: app
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 80
