@@ -1,0 +1,24 @@
+replicaCount: 1
+
+namespace: frontend-helm
+
+image:
+  repository: ghcr.io/lucasclaisse/devops-2/frontend
+  pullPolicy: Always
+  tag: "latest"
+
+imagePullSecrets:
+  name: regcred
+  
+nameOverride: ""
+fullnameOverride: "frontend"
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 80
+
+ingressroute:
+  entryPointsTls: [websecure]
+  entryPoints: [web]
+  host: frontend.helm.devops2.epitech.lucas-claisse.com

@@ -1,0 +1,35 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: ingressroutetls
+  namespace: {{ .Values.namespace }}
+spec:
+  {{- with .Values.ingressroute.entryPointsTls }}
+  entryPoints:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  routes:
+    - match: Host(`{{ .Values.ingressroute.host }}`)
+      kind: Rule
+      services:
+        - name: app
+          port: 80
+  tls:
+    certResolver: myresolver
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: ingressroute
+  namespace: {{ .Values.namespace }}
+spec:
+  {{- with .Values.ingressroute.entryPoints }}
+  entryPoints:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  routes:
+    - match: Host(`{{ .Values.ingressroute.host }}`)
+      kind: Rule
+      services:
+        - name: app
+          port: 80
